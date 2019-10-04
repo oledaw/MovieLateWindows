@@ -23,7 +23,7 @@ import java.awt.Toolkit;
 import java.awt.Dimension;
 
 @SuppressWarnings("serial")
-public class JFrame extends javax.swing.JFrame {
+public class MainWindow extends javax.swing.JFrame {
 
 	JPanel contentPanel;
 	JTextField txtEnglishText, txtPolishText;
@@ -61,7 +61,7 @@ public class JFrame extends javax.swing.JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JFrame frame = new JFrame(eng, pl);
+					MainWindow frame = new MainWindow(eng, pl);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,7 +73,7 @@ public class JFrame extends javax.swing.JFrame {
 
 		
 
-	public JFrame(String englishText, String polishText) {
+	public MainWindow(String englishText, String polishText) {
 		windowProperties(englishText);
 		contentPanel();
 		englishTextView(englishText);
@@ -92,7 +92,7 @@ public class JFrame extends javax.swing.JFrame {
 		setMinimumSize(new Dimension(540, 180));
 		setTitle("MoviesLate");
 		setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\Users\\dawid\\eclipse-workspace\\maveen\\img\\Program-icon.png"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(MainWindow.EXIT_ON_CLOSE);
 		setBounds(100, 100, englishText.length()*8 , 180);
 	}
 
@@ -114,7 +114,8 @@ public class JFrame extends javax.swing.JFrame {
 		btnDictionary.setBackground(new Color(255, 99, 71));
 		btnDictionary.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				DictionaryWindow textField = new DictionaryWindow("elko", "piona");
+				DictionaryWindow dictionaryWindow = new DictionaryWindow();
+				dictionaryWindow.initialize();
 			}
 		});
 		btnDictionary.setBounds(398, 113, 122, 23);

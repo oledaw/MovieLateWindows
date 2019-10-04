@@ -40,6 +40,7 @@ public class DatabaseWindow {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		
