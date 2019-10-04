@@ -13,6 +13,7 @@ import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
 import com.google.cloud.translate.Translate.TranslateOption;
+import com.movielate.DictionaryWindow;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -113,6 +114,7 @@ public class JFrame extends javax.swing.JFrame {
 		btnDictionary.setBackground(new Color(255, 99, 71));
 		btnDictionary.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				DictionaryWindow textField = new DictionaryWindow("elko", "piona");
 			}
 		});
 		btnDictionary.setBounds(398, 113, 122, 23);
