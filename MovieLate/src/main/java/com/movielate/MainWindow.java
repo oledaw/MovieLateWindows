@@ -24,40 +24,28 @@ import java.awt.Dimension;
 
 @SuppressWarnings("serial")
 public class MainWindow extends javax.swing.JFrame {
-
 	JPanel contentPanel;
 	JTextField txtEnglishText, txtPolishText;
 	JLabel englishIcon, polishIcon;
-	JButton btnDatabase, btnSearch, btnAdd, btnDictionary;
-	
+	JButton btnDatabase, btnSearch, btnAdd, btnDictionary;	
 	DatabaseWindow databaseWindow;
-	
-	
 	FireStore fireStore;
-
 	static String eng = null;
     static String pl = null;
-	
+    static BufferedImage screenBufferedImage = null;
+   
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
-		
-		BufferedImage screenBufferedImage = null;
-		
 		nu.pattern.OpenCV.loadLocally();
-		
-	    CaptureDisplay captureDisplay = new CaptureDisplay();
-	    
+	    Snapshot snapshot = new Snapshot();
 		try {
-			screenBufferedImage = captureDisplay.doScreenshot();
+			screenBufferedImage = snapshot.doOne();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 	    Mat screenMat = ImageToolBox.convertBufferedImageToMat(screenBufferedImage);
-	    
-	    eng = captureDisplay.doOCR(screenMat);
+	    eng = snapshot.doOCR(screenMat);
 	   	pl = TranslationText.onTranslate(eng); 
-
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -68,11 +56,7 @@ public class MainWindow extends javax.swing.JFrame {
 				}
 			}
 		});
-
 	}
-
-		
-
 	public MainWindow(String englishText, String polishText) {
 		windowProperties(englishText);
 		contentPanel();
@@ -85,9 +69,6 @@ public class MainWindow extends javax.swing.JFrame {
 		buttonAdd();
 		buttonMerriamWebsterDictionary();
 	}
-
-
-
 	private void windowProperties(String englishText) {
 		setMinimumSize(new Dimension(540, 180));
 		setTitle("MoviesLate");
@@ -95,9 +76,6 @@ public class MainWindow extends javax.swing.JFrame {
 		setDefaultCloseOperation(MainWindow.EXIT_ON_CLOSE);
 		setBounds(100, 100, englishText.length()*8 , 180);
 	}
-
-
-
 	private void contentPanel() {
 		contentPanel = new JPanel();
 		contentPanel.setMinimumSize(new Dimension(540, 180));
@@ -105,9 +83,6 @@ public class MainWindow extends javax.swing.JFrame {
 		setContentPane(contentPanel);
 		contentPanel.setLayout(null);
 	}
-
-
-
 	private void buttonMerriamWebsterDictionary() {
 		btnDictionary = new JButton("Słownik");
 		btnDictionary.setIcon(new ImageIcon("C:\\Users\\dawid\\eclipse-workspace\\maveen\\img\\Merriam-Webster-icon.png"));
@@ -121,9 +96,6 @@ public class MainWindow extends javax.swing.JFrame {
 		btnDictionary.setBounds(398, 113, 122, 23);
 		contentPanel.add(btnDictionary);
 	}
-
-
-
 	private void buttonAdd() {
 		btnAdd = new JButton("Dodaj");
 		btnAdd.setBackground(Color.GREEN);
@@ -132,36 +104,18 @@ public class MainWindow extends javax.swing.JFrame {
 		btnAdd.setBounds(282, 113, 106, 23);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-			    //String query = "SELECT * FROM fiszki.fiszki_tab";
-				//DatabaseConnection databaseConnection = new DatabaseConnection();
 				fireStore = new FireStore();
-				
 				fireStore.connect();
 				try {
 					fireStore.add(eng, pl);
 				} catch (InterruptedException | ExecutionException e2) {
 					// TODO Auto-generated catch block
 					e2.printStackTrace();
-				}
-				
-//				try {
-//					databaseConnection.getConnection();
-//					databaseConnection.addData(eng, pl);
-//					
-//					
-//				} catch (Exception e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-				System.out.println(eng +"\n" + pl);
+				}	
 			}
 		});
 		contentPanel.add(btnAdd);
 	}
-
-
-
 	private void buttonSearch() {
 		btnSearch = new JButton("Szukaj");
 		btnSearch.setBackground(new Color(176, 224, 230));
@@ -169,17 +123,13 @@ public class MainWindow extends javax.swing.JFrame {
 		btnSearch.setBounds(166, 113, 106, 23);
 		contentPanel.add(btnSearch);
 	}
-
-
-
 	private void buttonDatabase() {
 		btnDatabase = new JButton("Baza Danych");
 		btnDatabase.setBackground(new Color(176, 196, 222));
 		btnDatabase.setIcon(new ImageIcon("C:\\Users\\dawid\\eclipse-workspace\\maveen\\img\\Database-icon.png"));
 		btnDatabase.setBounds(10, 113, 146, 23);
 		btnDatabase.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {		
 				try {
 					databaseWindow = new DatabaseWindow();
 					databaseWindow.initialize();
@@ -187,26 +137,10 @@ public class MainWindow extends javax.swing.JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				
-				
-				
-				// TODO Auto-generated method stub
-//			    String query = "SELECT * FROM fiszki.fiszki_tab";
-//				DatabaseConnection databaseConnection = new DatabaseConnection();
-//				try {
-//					databaseConnection.getConnection();
-//					databaseConnection.getData(query);
-//				} catch (Exception e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
 			}
 		});
 		contentPanel.add(btnDatabase);
 	}
-
-
-
 	private void polishIcon() {
 		polishIcon = new JLabel();
 		polishIcon.setBounds(10, 67, 35, 35);
@@ -214,9 +148,6 @@ public class MainWindow extends javax.swing.JFrame {
 		polishIcon.setIcon(new ImageIcon("C:\\Users\\dawid\\eclipse-workspace\\maveen\\img\\Polish-icon.png"));
 		contentPanel.add(polishIcon);
 	}
-
-
-
 	private void englishIcon() {
 		englishIcon = new JLabel();
 		englishIcon.setBounds(10, 11, 35, 35);
@@ -224,18 +155,12 @@ public class MainWindow extends javax.swing.JFrame {
 		englishIcon.setIcon(new ImageIcon("C:\\Users\\dawid\\eclipse-workspace\\maveen\\img\\English-icon.png"));
 		contentPanel.add(englishIcon);
 	}
-
-
-
 	private void polishTextView(String polishText) {
 		txtPolishText = new JTextField();
 		txtPolishText.setText(polishText);
 		txtPolishText.setBounds(55, 67, polishText.length()*5+100, 35);
 		contentPanel.add(txtPolishText);
 	}
-
-
-
 	private void englishTextView(String englishText) {
 		txtEnglishText = new JTextField();
 		txtEnglishText.setText(englishText);
@@ -249,8 +174,7 @@ public class MainWindow extends javax.swing.JFrame {
 				        translate.translate(
 				            txtEnglishText.getText(),
 				            TranslateOption.sourceLanguage("en"),
-				            TranslateOption.targetLanguage("pl"));
-			
+				            TranslateOption.targetLanguage("pl"));	
 				txtPolishText.setText(translation.getTranslatedText());
 				eng = txtEnglishText.getText();
 				pl = txtPolishText.getText();

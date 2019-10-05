@@ -20,33 +20,22 @@ import javax.swing.GroupLayout.Alignment;
 
 
 public class DictionaryWindow extends JFrame {
-	
-	JFrame frame;
-		
+	JFrame frame;	
 	private static final int WINDOW_HEIGHT = 300;
 	private static final int WINDOW_WIDTH = 650;
-	
 	private JTextField searchingWord;
 	JLabel dictionarydefiniton;
 	
-	public DictionaryWindow() {
-
-	}
-	
+	public DictionaryWindow() {}
 	/**
 	 * Initialize the contents of the frame.
 	 * @wbp.parser.entryPoint
 	 */
 	public void initialize() {
 		windowProperties();
-		
 		setDefinitionField();
-		
 		setSearchingWordField();
-
-
 	}
-
 	private void setSearchingWordField() {
 		searchingWord = new JTextField();
 		searchingWord.setHorizontalAlignment(SwingConstants.CENTER);
@@ -54,26 +43,20 @@ public class DictionaryWindow extends JFrame {
 		frame.getContentPane().add(searchingWord, BorderLayout.NORTH);
 		searchingWord.setColumns(10);
 		searchingWord.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				String inputString = searchingWord.getText();
-				MerriamWebbsterDictionary merriamWebbsterDictionary = new MerriamWebbsterDictionary();
-				
+				MerriamWebbsterDictionary merriamWebbsterDictionary = new MerriamWebbsterDictionary();	
 				dictionarydefiniton.setText("<html>"+merriamWebbsterDictionary.Definicja(inputString)+"</html>");
-				
 				System.out.println("DEFNINICJA: " + merriamWebbsterDictionary.Definicja(inputString));
 			}
 		});
 	}
-
 	private void setDefinitionField() {
 		dictionarydefiniton = new JLabel("Definiton");
 		dictionarydefiniton.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.getContentPane().add(dictionarydefiniton);
 	}
-	
-	
 	private void windowProperties() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, WINDOW_WIDTH, WINDOW_HEIGHT);
