@@ -2,12 +2,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.maven</groupId>
-  <artifactId>maveen</artifactId>
+  <groupId>com.movielate</groupId>
+  <artifactId>movielate</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>maveen</name>
+  <name>movielate</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -40,6 +40,25 @@
 					<target>${jdk.version}</target>
 				</configuration>
 			</plugin>
+			
+			<!-- Maven One JAR file with dependencies Plugin -->
+			<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-jar-plugin</artifactId>
+    <configuration>
+        <archive>
+            <manifest>
+                <addClasspath>true</addClasspath>
+                <classpathPrefix>dependency/</classpathPrefix>
+                <mainClass>
+                    com.movielate.MainWindow
+                </mainClass>
+            </manifest>
+        </archive>
+    </configuration>
+</plugin>
+			
+			
 
 			<!-- Maven Assembly Plugin -->
 			<plugin>
@@ -54,7 +73,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 					  <manifest>
-						<mainClass>com.maven.maveen.App</mainClass>
+						<mainClass>com.movielate.MainWindow</mainClass>
 					  </manifest>
 					</archive>
 
@@ -96,6 +115,14 @@
 
 
   <dependencies>
+  
+<!-- https://mvnrepository.com/artifact/com.google.cloud/google-cloud-core -->
+<dependency>
+    <groupId>com.google.cloud</groupId>
+    <artifactId>google-cloud-core</artifactId>
+    <version>1.79.0</version>
+</dependency>
+
   
 <dependency>
   <groupId>com.google.cloud</groupId>
