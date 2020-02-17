@@ -1,5 +1,11 @@
 # MovieLateWindows
 
 If you want to embed images, this is how you do it:
+Ctrl+Space stops movie and run MoveLate Program
+![LINK](https://i.imgur.com/I1x9b7u.jpg)
+Correct current subtitles and translate them again
+![LINK](https://i.imgur.com/BDeJoai.jpg)
+Add to database and use MovieLateAndroid on your phone.
+MovieLateAndroid is a Flash-Card App. It has implemented a Leitner System to repeat your Flashcard from movies. You have to look at it, look on my repo!
 
-![LINK](https://drive.google.com/file/d/1kgTfYwSJLkmZl1gUEER4hIjzD2evc_h9/view?usp=sharing)
+Cheers!
