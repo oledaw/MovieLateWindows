@@ -1,12 +1,20 @@
 package com.movielate;
 
 import java.awt.AWTException;
+import java.awt.DisplayMode;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,7 +30,57 @@ public class Snapshot {
 	BufferedImage screenshot_BI;
 	String ocrText;
 	Mat screenshot_Mat;
+	int selectedIDDisplay;
 	public Snapshot(){}
+	
+	
+	void inicializeConfigFile() {
+    	try {
+    	    FileInputStream fstream = new FileInputStream("config.txt");
+    	    BufferedReader br = new BufferedReader(new InputStreamReader(fstream));
+    	    String strLine;         
+    	    int lineNumber = 0;
+    	    while ((strLine = br.readLine()) != null) {
+    	        lineNumber++;
+    	        strLine = strLine.replaceAll("[^0-9]+", " ").trim();
+    	        selectedIDDisplay = Integer.parseInt(strLine);	        
+    	    }       
+    	} catch (Exception e) {// Catch exception if any
+    	    System.err.println("Error: " + e.getMessage());
+    	}
+	}
+	
+	
+	BufferedImage multiDisplayMode() throws IOException {
+		
+		inicializeConfigFile();
+		
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice[] gDevs = ge.getScreenDevices();
+            DisplayMode mode = gDevs[selectedIDDisplay].getDisplayMode();
+            Rectangle bounds = gDevs[selectedIDDisplay].getDefaultConfiguration().getBounds();
+            System.out.println(gDevs[selectedIDDisplay].getIDstring());
+            System.out.println("Min : (" + bounds.getMinX() + "," + bounds.getMinY() + ") ;Max : (" + bounds.getMaxX()
+                    + "," + bounds.getMaxY() + ")");
+            System.out.println("Width : " + mode.getWidth() + " ; Height :" + mode.getHeight());
+            try {
+                Robot robot = new Robot();
+
+               screenshot_BI = robot.createScreenCapture(new Rectangle((int) bounds.getMinX(),
+                        (int) bounds.getMinY(), (int) bounds.getWidth(), (int) bounds.getHeight()));
+                
+//                ImageIO.write(screenshot_BI, "png",
+//                        new File("src/screen_" + gDevs[selectedIDDisplay].getIDstring().replace("\\", "") + ".png"));
+
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+            return screenshot_BI;
+	}
+	
+	
+	
+	
 	BufferedImage doOne() throws IOException {
 		try {
 			Robot robot = new Robot();
@@ -35,9 +93,9 @@ public class Snapshot {
 	}
 	String doOCR (Mat screenshot_Mat) {
 		Imgproc.cvtColor(screenshot_Mat, screenshot_Mat, Imgproc.COLOR_RGB2GRAY);
-		Imgproc.threshold(screenshot_Mat, screenshot_Mat, 200, 255, Imgproc.THRESH_BINARY_INV);
+		Imgproc.threshold(screenshot_Mat, screenshot_Mat, 190, 255, Imgproc.THRESH_BINARY_INV);
 		screenshot_BI = ImageToolBox.ConvertMat2BufferedImage(screenshot_Mat);
-		//showBufferedImage(screenshot_BI, "elko");
+		//showBufferedImage("elko");
 		Tesseract tesseract = new Tesseract();
 		try {
 			tesseract.setDatapath("C:/Users/dawid/Desktop/tessdata-master");		

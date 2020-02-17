@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.concurrent.ExecutionException;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -17,7 +20,10 @@ import com.movielate.DictionaryWindow;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.Dimension;
@@ -35,14 +41,22 @@ public class MainWindow extends javax.swing.JFrame {
     static BufferedImage screenBufferedImage = null;
    
 	public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+		
+		if (netIsAvailable()==false) {
+			//custom title, error icon
+		JOptionPane.showMessageDialog(new JFrame(),
+		    "Sprawdz polaczenie z internetem.",
+		    "Inane error",
+		    JOptionPane.ERROR_MESSAGE);
+		System.exit(1);
+		}
+		
+		
 		nu.pattern.OpenCV.loadLocally();
 	    Snapshot snapshot = new Snapshot();
-		try {
-			screenBufferedImage = snapshot.doOne();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		//screenBufferedImage = snapshot.doOne();
+	    
+		screenBufferedImage = snapshot.multiDisplayMode();
 	    Mat screenMat = ImageToolBox.convertBufferedImageToMat(screenBufferedImage);
 	    eng = snapshot.doOCR(screenMat);
 	   	pl = TranslationText.onTranslate(eng); 
@@ -97,6 +111,7 @@ public class MainWindow extends javax.swing.JFrame {
 		contentPanel.add(btnDictionary);
 	}
 	private void buttonAdd() {
+		
 		btnAdd = new JButton("Dodaj");
 		btnAdd.setBackground(Color.GREEN);
 		btnAdd.setForeground(Color.WHITE);
@@ -104,6 +119,9 @@ public class MainWindow extends javax.swing.JFrame {
 		btnAdd.setBounds(282, 113, 106, 23);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				eng = txtEnglishText.getText();
+				pl = txtPolishText.getText();
+				System.out.println(pl);
 				fireStore = new FireStore();
 				fireStore.connect();
 				try {
@@ -178,8 +196,21 @@ public class MainWindow extends javax.swing.JFrame {
 				txtPolishText.setText(translation.getTranslatedText());
 				eng = txtEnglishText.getText();
 				pl = txtPolishText.getText();
-				
 			}
 		});
+	}
+	
+	private static boolean netIsAvailable() {
+	    try {
+	        final URL url = new URL("http://www.google.com");
+	        final URLConnection conn = url.openConnection();
+	        conn.connect();
+	        conn.getInputStream().close();
+	        return true;
+	    } catch (MalformedURLException e) {
+	        throw new RuntimeException(e);
+	    } catch (IOException e) {
+	        return false;
+	    }
 	}
 }
