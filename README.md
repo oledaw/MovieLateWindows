@@ -8,4 +8,10 @@ Correct current subtitles and translate them again
 Add to database and use MovieLateAndroid on your phone.
 MovieLateAndroid is a Flash-Card App. It has implemented a Leitner System to repeat your Flashcard from movies. You have to look at it, look on my repo!
 
+### Tech stack:
+- Java
+- OpenCV
+- Google Firestore
+- Google Translation Api
+
 Cheers!
